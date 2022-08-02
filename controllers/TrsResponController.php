@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\helpers\Webhook;
 use app\models\TrsRespon;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -73,7 +74,7 @@ class TrsResponController extends Controller
 
     public function actionWebhook()
     {
-        $result = webhookCapture();
+        $result = Webhook::webhookCapture();
         $data = $result->data;
 
         if ($result->event == "new" && $result->type == "message" && $data->type == "text") {
@@ -85,9 +86,9 @@ class TrsResponController extends Controller
 
             if ($data->text != '1') {
                 $text = "Halo Saya Lumut.id";
-                sendText($data->from, $text);
+                Webhook::sendText($data->from, $text);
             } else {
-                sendText($data->from, $data->text);
+                Webhook::sendText($data->from, $data->text);
             }
         }
     }
